@@ -1,0 +1,12 @@
+﻿@model FileDataViewModel
+
+@{ Layout = null; }
+
+@if (Model != null && Model.Files != null && Model.Files.Count > 0)
+{
+    foreach (var file in Model.Files)
+    {
+        <a href='@Url.Action("DownloadFile", "Dashboard", routeValues: new { id = Model.Id, file = file })'>@file</a>
+        <br />
+    }
+}

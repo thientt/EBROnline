@@ -1,0 +1,20 @@
+﻿@model EBROnline.Infractructure.FilterPage
+
+@{
+    ViewBag.Title = "EBR Dashboard";
+    AjaxOptions ajaxOption = new AjaxOptions
+        {
+            UpdateTargetId = "tablePlanner",
+            Url = Url.Action("EBROfPlanner"),
+            HttpMethod = "GET",
+        };
+}
+<h2>EBR Dashboard</h2>
+<link href="~/Content/theme.default.css" rel="stylesheet" />
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div id="tablePlanner">
+    @Html.Action("EBROfPlanner", routeValues: new { page = Model.Page })
+</div>
+
+@Html.Partial("_PartialPageLoading")
