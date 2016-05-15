@@ -1,0 +1,17 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<EBROnline.Model.DTO.MSTProcessLTSDto>
+
+@{Html.RenderPartial("_PartialPageMSTList", Model);}
+
+@section scripts {
+    <script type="text/javascript">
+        $('.action').on('click', function (event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+
+            $('#modalEditBody').load(url);
+            $('#modalEdit').modal('show');
+        });
+    </script>
+}
+

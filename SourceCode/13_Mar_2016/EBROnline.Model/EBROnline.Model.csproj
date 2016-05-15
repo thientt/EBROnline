@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3B4D2035-1AF7-4147-8061-4EDC7711EDE2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EBROnline.Model</RootNamespace>
+    <AssemblyName>EBROnline.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstracts\IEBRSubMasterRepository.cs" />
+    <Compile Include="Abstracts\IMSTPKProcessTypeRepository.cs" />
+    <Compile Include="Abstracts\IMSTWaferSizeRepository.cs" />
+    <Compile Include="Abstracts\IMSTQualityLevelRepository.cs" />
+    <Compile Include="Abstracts\IMSTRequesterLocationRepository.cs" />
+    <Compile Include="Abstracts\IMSTPriorityOfAssemblyBuildRepository.cs" />
+    <Compile Include="Abstracts\IMSTProbeStatusRepository.cs" />
+    <Compile Include="Abstracts\IMSTPackageRepository.cs" />
+    <Compile Include="Abstracts\IMSTMarkingSLRepository.cs" />
+    <Compile Include="Abstracts\IMSTOwnerRepository.cs" />
+    <Compile Include="Abstracts\IMSTPackageTestTypeRepository.cs" />
+    <Compile Include="Abstracts\IMSTMarkingInstructionRepository .cs" />
+    <Compile Include="Abstracts\IMSTVendorContactRepository.cs" />
+    <Compile Include="Abstracts\IMSTVendorCodeRepository.cs" />
+    <Compile Include="Abstracts\IMSTAssLocRepository.cs" />
+    <Compile Include="Abstracts\IMSTBuildReasonRepository.cs" />
+    <Compile Include="Abstracts\IMSTWireMaterialRepository.cs" />
+    <Compile Include="Abstracts\IEBRMasterRepository.cs" />
+    <Compile Include="Abstracts\IMSTRevenueLocationRepository.cs" />
+    <Compile Include="Abstracts\IMSTProcessLTSRepository.cs" />
+    <Compile Include="Abstracts\IMSTFabCodeRepository.cs" />
+    <Compile Include="Abstracts\IMSTDieBankRepository.cs" />
+    <Compile Include="Abstracts\IMSTPackageTypesRepository.cs" />
+    <Compile Include="Abstracts\IMSTFGLocationRepository.cs" />
+    <Compile Include="Abstracts\IMSTEmailAddressRepository.cs" />
+    <Compile Include="Abstracts\ISNPFullMDRepository.cs" />
+    <Compile Include="Abstracts\ISYSRolesRepository.cs" />
+    <Compile Include="Abstracts\ISYSUsersRepository.cs" />
+    <Compile Include="Concretes\MSTFGLocationRepository.cs" />
+    <Compile Include="Concretes\MSTPKProcessTypeRepository.cs" />
+    <Compile Include="Concretes\MSTOwnerRepository.cs" />
+    <Compile Include="Concretes\MSTMarkingInstructionRepository .cs" />
+    <Compile Include="Concretes\MSTVendorCodeRepository.cs" />
+    <Compile Include="Concretes\MSTWaferSizeRepository.cs" />
+    <Compile Include="Concretes\MSTPackageTestTypeRepository.cs" />
+    <Compile Include="Concretes\MSTPriorityOfAssemblyBuildRepository.cs" />
+    <Compile Include="Concretes\MSTPackageRepository.cs" />
+    <Compile Include="Concretes\MSTProbeStatusRepository.cs" />
+    <Compile Include="Concretes\EBRSubMasterRepository.cs" />
+    <Compile Include="Concretes\MSTAssLocRepository.cs" />
+    <Compile Include="Concretes\MSTBuildReasonRepository.cs" />
+    <Compile Include="Concretes\MSTRevenueLocationRepository.cs" />
+    <Compile Include="Concretes\MSTQualityLevelRepository.cs" />
+    <Compile Include="Concretes\MSTDieBankRepository.cs" />
+    <Compile Include="Concretes\MSTEmailAddressRepository.cs" />
+    <Compile Include="Concretes\MSTFabCodeRepository.cs" />
+    <Compile Include="Concretes\EBRMasterRepository.cs" />
+    <Compile Include="Concretes\MSTProcessLTSRepository.cs" />
+    <Compile Include="Concretes\MSTMarkingSLRepository.cs" />
+    <Compile Include="Concretes\MSTVendorContactRepository.cs" />
+    <Compile Include="Concretes\MSTWireMaterialRepository.cs" />
+    <Compile Include="Concretes\MSTRequesterLocationRepository.cs" />
+    <Compile Include="Concretes\MSTPackageTypesRepository.cs" />
+    <Compile Include="Concretes\SNPFullMDRepository.cs" />
+    <Compile Include="Concretes\SYSRolesRepository.cs" />
+    <Compile Include="Concretes\SYSUsersRepository.cs" />
+    <Compile Include="DTO\EBRSubMasterDto.cs" />
+    <Compile Include="DTO\MSTFGLocationDto.cs" />
+    <Compile Include="DTO\MSTWireMaterialDto.cs" />
+    <Compile Include="DTO\MSTWaferSizeDto.cs" />
+    <Compile Include="DTO\MSTVendorContactDto.cs" />
+    <Compile Include="DTO\MSTProbeStatusDto.cs" />
+    <Compile Include="DTO\MSTProcessLTSDto.cs" />
+    <Compile Include="DTO\MSTQualityLevelDto.cs" />
+    <Compile Include="DTO\MSTRequesterLocationDto.cs" />
+    <Compile Include="DTO\MSTRevenueLocationDto.cs" />
+    <Compile Include="DTO\MSTVendorCodeDto.cs" />
+    <Compile Include="DTO\MSTPriorityOfAssemblyBuildDto.cs" />
+    <Compile Include="DTO\MSTPKGProcessTypeDto.cs" />
+    <Compile Include="DTO\BaseDto.cs" />
+    <Compile Include="DTO\MSTBuildReasonDto.cs" />
+    <Compile Include="DTO\MSTDieBankDto.cs" />
+    <Compile Include="DTO\MSTAssLocDto.cs" />
+    <Compile Include="DTO\MSTEmailAddressDto.cs" />
+    <Compile Include="DTO\MSTPackageTestTypeDto.cs" />
+    <Compile Include="DTO\EBRMasterDto.cs" />
+    <Compile Include="DTO\MSTFabCodeDto.cs" />
+    <Compile Include="DTO\MSTPackageDto.cs" />
+    <Compile Include="DTO\MSTDto.cs" />
+    <Compile Include="DTO\MSTMarkingSLDto.cs" />
+    <Compile Include="DTO\MSTOwnerDto.cs" />
+    <Compile Include="DTO\MSTMarkingInstructionDto.cs" />
+    <Compile Include="DTO\MSTPackingTypeDto.cs" />
+    <Compile Include="DTO\SYSRolesDto.cs" />
+    <Compile Include="DTO\SYSUsersDto.cs" />
+    <Compile Include="DTO\vEBR_CPN_LIST.cs" />
+    <Compile Include="Entities\EBROnlineModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBROnlineModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBROnlineModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBROnlineModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBROnlineModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_Dashboard.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_AssemblyLocation.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_BuildReason.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_DieBank.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_EmailAddress.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_FabCode.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_FGLocation.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_MarkingInstruction.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_MarkingSL.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_Owner.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_Package.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_PackageTestType.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_PackingType.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_PKGProcessType.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_PriorityOfAssemblyBuild.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_ProbeStatus.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_ProcessLTS.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_QualityLevel.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_RequesterLocation.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_RevenueLocation.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_VendorCode.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_VendorContact.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_WaferSize.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_MST_WireMaterial.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_SubDashboard.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_SYS_Roles.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EBR_SYS_Users.cs">
+      <DependentUpon>EBROnlineModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IAdd.cs" />
+    <Compile Include="Repositories\IDelete.cs" />
+    <Compile Include="Repositories\IGet.cs" />
+    <Compile Include="Repositories\IMSTRepository.cs" />
+    <Compile Include="Repositories\ISingle.cs" />
+    <Compile Include="Repositories\IUpdate.cs" />
+    <Compile Include="Repositories\MSTRepository.cs" />
+    <Compile Include="SaveResult.cs" />
+    <Compile Include="Types\RoleType.cs" />
+    <Compile Include="Types\StatusType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EBROnline.Utilities\EBROnline.Utilities.csproj">
+      <Project>{9331f33c-729b-4605-9aab-183dc7489f9c}</Project>
+      <Name>EBROnline.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <EntityDeploy Include="Entities\EBROnlineModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EBROnlineModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Entities\EBROnlineModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EBROnlineModel.edmx</DependentUpon>
+      <LastGenOutput>EBROnlineModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Entities\EBROnlineModel.edmx.diagram">
+      <DependentUpon>EBROnlineModel.edmx</DependentUpon>
+    </None>
+    <None Include="Entities\EBROnlineModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EBROnlineModel.edmx</DependentUpon>
+      <LastGenOutput>EBROnlineModel.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

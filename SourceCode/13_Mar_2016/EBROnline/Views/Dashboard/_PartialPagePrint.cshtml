@@ -1,0 +1,779 @@
+﻿@{
+    Layout = null;
+}
+
+@model EBROnline.ViewModel.PrintViewModel
+
+<style>
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+    /* suppress link for printing */
+    @@media only print {
+    }
+
+    @@media print {
+        .noprint {
+            display: none !important;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    }
+
+    @@media page {
+    }
+
+    @@page {
+        size: A4 portrait;
+    }
+
+    @@page:left {
+        margin-left: 1cm;
+    }
+
+    @@page:right {
+        margin-right: 1cm;
+    }
+
+    @@page:right {
+        @@bottom-left {
+            margin: 10pt 0 30pt 0;
+            border-top: .25pt solid #666;
+            content: "My book";
+            font-size: 9pt;
+            color: #333;
+        }
+    }
+
+    @@media screen {
+        .table-head {
+            background-color: #fff;
+        }
+    }
+
+    h1, h2, h3, h4, h5 {
+        page-break-after: avoid;
+    }
+
+    table, figure {
+        page-break-inside: auto;
+    }
+
+    .row {
+        width: 100%;
+    }
+
+    .form-group {
+        display: inline-flex;
+        min-height: 25px;
+        width: 100%;
+    }
+
+    .table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 35px;
+    }
+
+        .table > tbody > tr {
+            line-height: 14px;
+            height: 14px;
+        }
+
+    tr:last-child td:last-child {
+        -moz-border-radius-bottomright: 0px;
+        -webkit-border-bottom-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    table tr:first-child td:first-child {
+        -moz-border-radius-topleft: 0px;
+        -webkit-border-top-left-radius: 0px;
+        border-top-left-radius: 1px;
+    }
+
+    table tr:first-child td:last-child {
+        -moz-border-radius-topright: 0px;
+        -webkit-border-top-right-radius: 0px;
+        border-top-right-radius: 1px;
+    }
+
+    tr:last-child td:first-child {
+        -moz-border-radius-bottomleft: 0px;
+        -webkit-border-bottom-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    td {
+        vertical-align: top;
+        border: 1px solid #000000;
+        border-width: 1px;
+        text-align: left;
+        padding: 7px;
+        font-size: 10px;
+        font-family: Arial;
+        font-weight: normal;
+        color: #000000;
+    }
+
+    thead tr:first-child th {
+        background: -o-linear-gradient(bottom, #ff7f00 5%, #bf5f00 100%);
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ff7f00), color-stop(1, #bf5f00) );
+        background: -moz-linear-gradient( center top, #ff7f00 5%, #bf5f00 100% );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff7f00", endColorstr="#bf5f00");
+        background: -o-linear-gradient(top,#ff7f00,bf5f00);
+        background-color: #ff7f00;
+        border: 0px solid #000000;
+        text-align: center;
+        border-width: 1px;
+        font-size: 14px;
+        font-family: Arial;
+        font-weight: bold;
+        height: 35px;
+        color: #ffffff;
+    }
+
+    tr.nontd td {
+        border: none;
+        border-width: 0px;
+        font-size: 18px;
+    }
+
+    .odd {
+        min-width: 120px;
+        font-style: italic;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .even {
+        width: 100%;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .button {
+        display: inline-block;
+        background: #6d84b4;
+        border-color: #3b5998;
+        white-space: nowrap;
+        font-size: 11.5px;
+        font-family: Tahoma;
+        width: 70px;
+        height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 6px 12px;
+        -moz-border-image: none;
+        -webkit-border-image: none;
+        -o-border-image: none;
+        border-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 20px;
+        line-height: 13px;
+        /*-webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;*/
+    }
+
+    .editor-multiline-field {
+        height: 80px;
+    }
+
+    .checkbox {
+        margin: 0px;
+        margin-left: 10px;
+    }
+</style>
+
+<a href="#" onclick="window.print(); return false;" class="button noprint">Print</a>
+<br />
+
+<div>
+    <hr />
+    <h3>EBR REQUEST DETAILS</h3>
+</div>
+<br />
+<div class="container">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td style="width:50%;border:none;">
+                    <table>
+                        <tr>
+                            <td class="odd">Device/Comets#/IMS PIS#</td>
+                            <td class="even">
+                                <span>@Model.Master.Device</span>
+                        </tr>
+                        <tr>
+                            <td class="odd">AL/C0/SL/QS/T's# + Rev</td>
+                            <td class="even">
+                                @Model.Master.Rev
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">FAB Die Revision</td>
+                            <td class="even">
+                                @Model.Master.FABDieRevision
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">PMPN</td>
+                            <td class="even">
+                                @Model.Master.PMPN
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">AMPN</td>
+                            <td class="even">
+                                @Model.Master.AMPN
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">TMPN</td>
+                            <td class="even">
+                                @Model.Master.TMPN
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">FMPN</td>
+                            <td class="even">
+                                @Model.Master.FMPN
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">CPN or SAP MATERIAL</td>
+                            <td class="even">
+                                @Model.Master.CPN_SAP_Material
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Package</td>
+                            <td class="even">
+                                @Model.Master.Package.Name
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Package Size</td>
+                            <td class="even">
+                                @Model.Master.PackageSize
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Leads</td>
+                            <td class="even">
+                                @Model.Master.Leads
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Speed</td>
+                            <td class="even">
+                                @Model.Master.Speed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">eABI/EBR Revision</td>
+                            <td class="even">
+                                @Model.Master.EABI_EBR_Revision
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Wafer Size</td>
+                            <td class="even">
+                                @Model.Master.WaferSizeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Current Wafer Thichness</td>
+                            <td class="even">
+                                @Model.Master.CurrentWaferThichness
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Internal Device</td>
+                            <td class="even">
+                                @Model.Master.InternalDevice
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Fab Code</td>
+                            <td class="even">
+                                @Model.Master.FabCodeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Power/Voltage</td>
+                            <td class="even">
+                                @Model.Master.Power_Voltage
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Die Blank Location</td>
+                            <td class="even">
+                                @Model.Master.DieBlankId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Assembly Locationn</td>
+                            <td class="even">
+                                @Model.Master.AssemblyLocationId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">FG Location</td>
+                            <td class="even">
+                                @Model.Master.FGLocationId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Assembly Flow (Option)</td>
+                            <td class="even">
+                                @Model.Master.AssemblyFlow
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Package Type</td>
+                            <td class="even">
+                                @Model.Master.PackageTypeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Top Side Marking</td>
+                            <td class="even">
+                                @Model.Master.TopSideMarkingId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">MRL</td>
+                            <td class="even">
+                                @Model.Master.MRL
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd" style="font-size:8px; font-weight:normal;">Name of Marking File,if attached</td>
+                            <td class="even">
+                                @Model.Master.NameOfMarkingFile
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Requires Special Mark (Y/N)</td>
+                            <td class="even">
+                                <input type="checkbox" value="@Model.Master.RequiresSpecialMark" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Requires Ass'y Engr Input</td>
+                            <td class="even">
+                                <input type="checkbox" value="@Model.Master.RequiresAssEngrInput" />"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Marking Code (JSO)</td>
+                            <td class="even">
+                                @Model.Master.MarkingCodeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Pin 1 Marking</td>
+                            <td class="even">
+                                @Model.Master.Pin1Marking
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Top Line</td>
+                            <td class="even">
+                                @Model.Master.TopLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">2nd Line</td>
+                            <td class="even">
+                                @Model.Master.TwoLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">3rdLine</td>
+                            <td class="even">
+                                @Model.Master.ThreeLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">4th Line</td>
+                            <td class="even">
+                                @Model.Master.FourLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">5th Line</td>
+                            <td class="even">
+                                @Model.Master.FiveLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">6th Line</td>
+                            <td class="even">
+                                @Model.Master.SixLine
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Ship Finished Product to</td>
+                            <td class="even">
+                                @Model.Master.ShipFinishedProductToId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Attention</td>
+                            <td class="even">
+                                @Model.Master.AttentionFinished
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Ship Rejected Part to</td>
+                            <td class="even">
+                                @Model.Master.ShipRejectedPartToId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Attention</td>
+                            <td class="even">
+                                @Model.Master.AttentionRejected
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">(Optional) Return Wafer to</td>
+                            <td class="even">
+                                @Model.Master.ReturnWaferToId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Assembly Location Email</td>
+                            <td class="even">
+                                @Model.Master.VendorContactId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Vendor Code (CSO Only)</td>
+                            <td class="even">
+                                @Model.Master.VendorCodeId
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width:50%; vertical-align: top; border:none;">
+                    <table>
+                        <tr>
+                            <td class="odd">Purpose Of Build</td>
+                            <td class="even">
+                                @Model.Master.PurposeOfBuildId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Lot Owner (Mandatory)</td>
+                            <td class="even">
+                                @Model.Master.LotOwnerId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Requestd Cycle Time</td>
+                            <td class="even">
+                                @Model.Master.RequestCycleTimeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">PKG Process<span style="font-weight:normal;"> (Env Code)</span></td>
+                            <td class="even">
+                                @Model.Master.PKGProcessId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Quality Level</td>
+                            <td class="even">
+                                @Model.Master.QualityLevelId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Revenue Loc (Mandatory)</td>
+                            <td class="even">
+                                @Model.Master.RevenueLocationId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">BondDiagramAttached</td>
+                            <td class="even">
+                                <input type="checkbox" class="checkbox" value='@Model.Master.BondDiagramAttached' />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Scrap Excess Die/Wafer?</td>
+                            <td class="even">
+                                @{
+                                    if (Model.Master.ScrapExcessDie_Wafer.HasValue)
+                                    {
+                                        if (Model.Master.ScrapExcessDie_Wafer.Value)
+                                        {
+                                            @("YES");
+                                        }
+                                        else
+                                        {
+                                            @("NO");
+                                        }
+                                    }
+                                }
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="odd">UV Erase</td>
+                            <td class="even">
+                                <input type="checkbox" class="checkbox" value='@Model.Master.UV_Erase' />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">DieCoat</td>
+                            <td class="even">
+                                <input type="checkbox" class="checkbox" value='@Model.Master.DieCoat' />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">WireMaterial</td>
+                            <td class="even">
+                                @Model.Master.WireMaterialId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">ProcessLTSID</td>
+                            <td class="even">
+                                @Model.Master.ProcessLTSID
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">ForecastMaterial</td>
+                            <td class="even">
+                                @Model.Master.ForecastMaterial
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">BondDiagram</td>
+                            <td class="even">
+                                @Model.Master.BondDiagram
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">BondDiagramRev</td>
+                            <td class="even">
+                                @Model.Master.BondDiagramRev
+                            </td>
+                        </tr>
+                        <tr style="min-height:500px;">
+                            <td class="odd" colspan="2"
+                                style="text-align:center; padding:0;">
+                                <table style="width:100%;">
+                                    <tbody>
+                                        <tr style="background-color:#b6ff00">
+                                            <td style="text-align:center; border:none;border-bottom:1px solid #ddd;
+width:100%;">
+                                                <span>EngineerTeam</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left;
+border:none;">
+                                                <span>
+                                                    @Model.Master.EngineerTeam
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">TestLocation</td>
+                            <td class="even">
+                                @Model.Master.TestLocationId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">ProbeStatus</td>
+                            <td class="even">
+                                @Model.Master.ProbeStatusId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">PackageTestType</td>
+                            <td class="even">
+                                @Model.Master.PackageTestTypeId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">TestProgram</td>
+                            <td class="even">
+                                @Model.Master.TestProgram
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">TestProgamAvailable</td>
+                            <td class="even">
+                                @Model.Master.TestProgamAvailable
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">CommentAvailable</td>
+                            <td class="even">
+                                @Model.Master.CommentAvailable
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">Test_Special_Instruction</td>
+                            <td class="even">
+                                @Model.Master.Test_Special_Instruction
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    MES Lot Number
+                </th>
+                <th>
+                    SAP Batch Lot Number
+                </th>
+                <th>
+                    Wafer Qty
+                </th>
+                <th>
+                    Build Quantity
+                </th>
+                <th>
+                    Comment/Wafer
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.SubMaster)
+            {
+                <tr>
+                    <td>
+                        @*<div> MES Lot Number</div>*@
+                        @item.MES_Lot_Number
+                    </td>
+                    <td>
+                        @*<div>SAP Batch Lot Number</div>*@
+                        @item.SAP_Batch_Lot_Number
+                    </td>
+                    <td>
+                        @item.WaferQty
+                    </td>
+                    <td>
+                        @item.BuildQty
+                    </td>
+                    <td>
+                        @item.Comment
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+    <br />
+    <table class="table">
+        <tbody>
+            <tr>
+                <td style="border:none;">
+                    <table>
+                        <tr>
+                            <td class="odd">RequestedBy</td>
+                            <td class="even">
+                                @Model.Master.RequestedBy
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">EmailAddress</td>
+                            <td class="even">
+                                @Model.Master.EmailAddressId
+                        </tr>
+                        <tr>
+                            <td class="odd">Phone</td>
+                            <td class="even">
+                                @Model.Master.Phone
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">RequesterLocation</td>
+                            <td class="even">
+                                @Model.Master.RequesterLocationId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="odd">BusinessUnit</td>
+                            <td class="even">
+                                @Model.Master.BusinessUnit
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="border:none;">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="odd">ApprovingManager</td>
+                                <td class="even">
+                                    @Model.Master.ApprovingManager
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="odd">ManagerEmail</td>
+                                <td class="even">
+                                    @Model.Master.ManagerEmailId
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="odd">TotalCost</td>
+                                <td class="even">
+                                    @Model.Master.TotalCost
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="odd">RequestedShipDate</td>
+                                <td class="even">
+                                    @Html.DisplayFor(x => x.Master.RequestedShipDate, "DisplayDateTime")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="odd">
+                                    RequiresTestPgmApproval
+                                </td>
+                                <td class="even">
+                                    @Model.Master.RequiresTestPgmApproval
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br />
+<a href="#" onclick="window.print(); return false;" class="button noprint">Print</a>
+
