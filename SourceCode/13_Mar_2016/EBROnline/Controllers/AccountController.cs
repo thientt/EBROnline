@@ -62,7 +62,7 @@ namespace EBROnline.Controllers
             var user = UserRepository.CheckExistEmail(register.Email);
             if (user != null)
             {
-                ModelState.AddModelError("EXISTED", "Email eixsted in system, Please enter email!");
+                ModelState.AddModelError("EXISTED", "Email existed in system, Please enter email!");
                 return View(register);
             }
 
@@ -132,7 +132,7 @@ namespace EBROnline.Controllers
         /// <summary>
         /// Recovers the password.
         /// </summary>
-        /// <param name="viewmodel">The viewmodel.</param>
+        /// <param name="viewmodel">The view model.</param>
         /// <returns></returns>
         [HttpPost, AllowAnonymous]
         public async Task<ActionResult> RecoverPassword(RecoverPasswordViewModel viewmodel)
@@ -225,7 +225,7 @@ namespace EBROnline.Controllers
         /// Edits the profile.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <param name="viewmodel">The viewmodel.</param>
+        /// <param name="viewmodel">The view model.</param>
         /// <returns></returns>
         [HttpPost, Authorize]
         public async Task<ActionResult> EditProfile(int id, AccountViewModel viewmodel)
@@ -271,7 +271,7 @@ namespace EBROnline.Controllers
         /// Changes the password.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <param name="viewmodel">The viewmodel.</param>
+        /// <param name="viewmodel">The view model.</param>
         /// <returns></returns>
         [HttpPost, Authorize]
         public async Task<ActionResult> ChangePassword(int id, ChangePasswordViewModel viewmodel)
