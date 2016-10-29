@@ -386,9 +386,6 @@ namespace EBROnline.Controllers
         }
 
         #region Inject
-        [Inject]
-        public ILogService LogService { get; set; }
-
         /// <summary>
         /// Gets or sets the user repository.
         /// </summary>
