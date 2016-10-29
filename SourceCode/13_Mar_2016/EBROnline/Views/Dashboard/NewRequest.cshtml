@@ -1,0 +1,1269 @@
+﻿@model DashboardViewModel
+
+@{
+    ViewBag.Title = "NewRequest";
+    ViewBag.ID = "0";
+    AjaxOptions ajaxOption = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnBegin = "onBegin",
+        OnComplete = "onComplete",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+    };
+
+    List<SelectListItem> dropdownYESNO = new List<SelectListItem>();
+    dropdownYESNO.Add(new SelectListItem { Text = "YES", Value = "true" });
+    dropdownYESNO.Add(new SelectListItem { Text = "NO", Value = "false", });
+
+    List<SelectListItem> dropdownYESNOComment = new List<SelectListItem>();
+    dropdownYESNOComment.Add(new SelectListItem { Text = "YES", Value = "true" });
+    dropdownYESNOComment.Add(new SelectListItem { Text = "NO, much provide instructions", Value = "false", });
+}
+
+<link href="~/Content/main.css" rel="stylesheet" />
+<link href="~/Content/app/comment.css" rel="stylesheet" />
+
+<style>
+    .editor-multiline-field textarea {
+        height: 80px;
+    }
+
+    .required {
+        color: red;
+        font-size: 15px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .custom-combobox {
+        position: relative;
+        display: inline-block;
+    }
+
+    .custom-combobox-toggle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin-left: -1px;
+        padding: 0;
+        /* support: IE7 */
+        *height: 1.7em;
+        *top: 0.1em;
+    }
+
+    .custom-combobox-input {
+        margin: 0;
+        padding: 0.3em;
+    }
+</style>
+
+<h2>New EBR Request</h2>
+
+@using (Ajax.BeginForm(ajaxOption))
+{
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Device, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.Device, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtDevice" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="(CSO Example) AT36302-DSxH-08-T <br/> (SJO Example) 36302 or 36302-1 <br/> (RFO-NTO Example)  36302/PID16"></span>
+                        @Html.ValidationMessageFor(model => model.Device)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rev, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.Rev, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtRev" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) SL903Rev00</strong>"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FABDieRevision, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.FABDieRevision, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtFABDieRevision" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) A, B, C, etc</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.FABDieRevision)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PMPN, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.PMPN, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtPMPN" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 36302A11P or 36302AXXP</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.PMPN)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AMPN, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.AMPN, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtFMPN" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 36302A11-SWBH11A or 36302AXX-SWBXXXA</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.AMPN)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TMPN, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.TMPN, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtTMPN" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 36302A11-SWBH11T or 36302AXX-SWBXXXT</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.TMPN)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FMPN, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.FMPN, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtFMPN" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 36302A11-SWBH11F </br>If building a Proto Part <br />(Example) 36302AXX-SWBXXXF<br />do not enter anything in this field</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.FMPN)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CPN_SAP_Material, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.CPN_SAP_Material, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtCPN_SAP_Material" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(This is the Material in SAP,<br />also known as the CPN<br />(Example) 24C02D-SSHM-T</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.CPN_SAP_Material)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PackageId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.PackageId, new SelectList(Model.Packages, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboPackage" })
+                        @Html.ValidationMessageFor(model => model.PackageId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PackageSize, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.PackageSize, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtPackageSize" })
+                        @Html.ValidationMessageFor(model => model.PackageSize)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="Leads">Leads</label>
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.Leads, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtLeads" })
+                        @Html.ValidationMessageFor(model => model.Leads)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Speed, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.Speed, htmlAttributes: new { @class = "form-control bg-yellow", @id = "txtSpeed" })
+                        @Html.ValidationMessageFor(model => model.Speed)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EABI_EBR_Revision, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.EABI_EBR_Revision, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtEABI_EBR_Revision" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 01, 02, 03….</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.EABI_EBR_Revision)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WaferSizeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.WaferSizeId, new SelectList(Model.WaferSizes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboWaferSize" })
+                        @Html.ValidationMessageFor(model => model.WaferSizeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CurrentWaferThichness, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.CurrentWaferThichness, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtCurrentWaferThichness" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 28 mils, 11<br /> mils, 6 mils, etc...</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.CurrentWaferThichness)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.InternalDevice, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.InternalDevice, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtInternalDevice" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) 35934-1, 35934-2, etc</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.InternalDevice)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FabCodeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.FabCodeId, new SelectList(Model.FabCodes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboFabCode" })
+                        @Html.ValidationMessageFor(model => model.FabCodeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Power_Voltage, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.Power_Voltage, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtPowerVoltage" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>Optional</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.Power_Voltage)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DieBlankId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.DieBlankId, new SelectList(Model.DieBlanks, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboDieBlank" })
+                        @Html.ValidationMessageFor(model => model.DieBlankId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AssemblyLocationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.AssemblyLocationId, new SelectList(Model.AssemblyLocations, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboAssemblyLocation" })
+                        @Html.ValidationMessageFor(model => model.AssemblyLocationId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FGLocationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.FGLocationId, new SelectList(Model.FGLocations, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboFGLocation" })
+                        @Html.ValidationMessageFor(model => model.FGLocationId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AssemblyFlow, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.AssemblyFlow, htmlAttributes: new { @class = "form-control bg-yellow", @id = "txtAssemblyFlow" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>Optional</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.AssemblyFlow)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PackageTypeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.PackageTypeId, new SelectList(Model.PackageTypes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboPackageType" })
+                        @Html.ValidationMessageFor(model => model.PackageTypeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TopSideMarkingId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.TopSideMarkingId, new SelectList(Model.MarkingInstructions, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboTopSideMarking" })
+                        @Html.ValidationMessageFor(model => model.TopSideMarkingId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MRL, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.MRL, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtMRL" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>JSO Only</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.MRL)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NameOfMarkingFile, htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:10px; font-weight:normal;" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.NameOfMarkingFile, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtNameOfMarkingFile" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>If a file is provided, just note the file name here.</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.NameOfMarkingFile)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequiresSpecialMark, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RequiresSpecialMark, dropdownYESNO, "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboRequiresSpecialMark" })
+                        @Html.ValidationMessageFor(model => model.RequiresSpecialMark)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequiresAssEngrInput, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RequiresAssEngrInput, dropdownYESNO, "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboRequiresAssEngrInput" })
+                        @Html.ValidationMessageFor(model => model.RequiresAssEngrInput)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MarkingCodeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.DropDownListFor(model => model.MarkingCodeId, new SelectList(Model.MarkingCodes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboMarkingCode" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>(Example) A2S1, etc... from MA-5005</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.MarkingCodeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Pin1Marking, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.Pin1Marking, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtPin1Marking" })
+                        @Html.ValidationMessageFor(model => model.Pin1Marking)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TopLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.TopLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtTopLine" })
+                        @Html.ValidationMessageFor(model => model.TopLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TwoLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.TwoLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtTwoLine" })
+                        @Html.ValidationMessageFor(model => model.TwoLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThreeLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.ThreeLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtThreeLine" })
+                        @Html.ValidationMessageFor(model => model.ThreeLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FourLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.FourLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtFourLine" })
+                        @Html.ValidationMessageFor(model => model.FourLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FiveLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.FiveLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtFiveLine" })
+                        @Html.ValidationMessageFor(model => model.FiveLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SixLine, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.SixLine, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtSixLine" })
+                        @Html.ValidationMessageFor(model => model.SixLine)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShipFinishedProductToId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ShipFinishedProductToId, new SelectList(Model.ShipFinishedProductTos, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboShipFinishedProductTo" })
+                        @Html.ValidationMessageFor(model => model.ShipFinishedProductToId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AttentionFinished, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.AttentionFinished, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtAttentionFinished" })
+                        @Html.ValidationMessageFor(model => model.AttentionFinished)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShipRejectedPartToId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ShipRejectedPartToId, new SelectList(Model.ShipRejectedPartTos, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboShipRejectedPartTo" })
+                        @Html.ValidationMessageFor(model => model.ShipRejectedPartToId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AttentionRejected, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.AttentionRejected, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtAttentionRejected" })
+                        @Html.ValidationMessageFor(model => model.AttentionRejected)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReturnWaferToId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ReturnWaferToId, new SelectList(Model.ReturnWaferTos, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboReturnWaferTo" })
+                        @Html.ValidationMessageFor(model => model.ReturnWaferToId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VendorContactId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.VendorContactId, new SelectList(Model.VendorContacts, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-purple", @id = "cboVendorContact" })
+                        @Html.ValidationMessageFor(model => model.VendorContactId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VendorCodeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.VendorCodeId, new SelectList(Model.VendorCodes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-yellow", @id = "cboVendorCode" })
+                        @Html.ValidationMessageFor(model => model.VendorCodeId)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PurposeOfBuildId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.PurposeOfBuildId, new SelectList(Model.PurposeOfBuilds, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboPurposeOfBuild" })
+                        @Html.ValidationMessageFor(model => model.PurposeOfBuildId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LotOwnerId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.LotOwnerId, new SelectList(Model.LotOwners, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboLotOwner" })
+                        @Html.ValidationMessageFor(model => model.LotOwnerId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequestCycleTimeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RequestCycleTimeId, new SelectList(Model.RequestCycleTimes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboRequestCycleTime" })
+                        @Html.ValidationMessageFor(model => model.RequestCycleTimeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PKGProcessId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.PKGProcessId, new SelectList(Model.PKGProcess, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboPKGProcess" })
+                        @Html.ValidationMessageFor(model => model.PKGProcessId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.QualityLevelId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.QualityLevelId, new SelectList(Model.QualityLevels, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboQualityLevel" })
+                        @Html.ValidationMessageFor(model => model.QualityLevelId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RevenueLocationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RevenueLocationId, new SelectList(Model.RevenueLocations, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboRevenueLocation" })
+                        @Html.ValidationMessageFor(model => model.RevenueLocationId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BondDiagramAttached, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.BondDiagramAttached, htmlAttributes: new { @class = "checkbox", @id = "chkBondDiagramAttached" })
+                        @Html.ValidationMessageFor(model => model.BondDiagramAttached)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ScrapExcessDie_Wafer, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.DropDownListFor(model => model.ScrapExcessDie_Wafer, dropdownYESNOComment, "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboScrapExcessDie_Wafer" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>This field refers to excess die or the wafer skeleton die… not residual parts</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.ScrapExcessDie_Wafer)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UV_Erase, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.UV_Erase, htmlAttributes: new { @class = "checkbox", @id = "chkUV_Erase" })
+                        @Html.ValidationMessageFor(model => model.UV_Erase)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DieCoat, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.DieCoat, htmlAttributes: new { @class = "checkbox", @id = "chkDieCoat" })
+                        @Html.ValidationMessageFor(model => model.DieCoat)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WireMaterialId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.WireMaterialId, new SelectList(Model.WireMaterias, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboWireMaterial" })
+                        @Html.ValidationMessageFor(model => model.WireMaterialId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ProcessLTSID, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ProcessLTSID, new SelectList(Model.ProcessLTSs, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboProcessLTS" })
+                        @Html.ValidationMessageFor(model => model.ProcessLTSID)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ForecastMaterial, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ForecastMaterial, dropdownYESNO, "--- Select ---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboForecastMaterial" })
+                        @Html.ValidationMessageFor(model => model.ForecastMaterial)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BondDiagram, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.BondDiagram, htmlAttributes: new { @class = "form-control bg-yellow", @id = "txtBondDiagram" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>Bond Diagram File Name as a Reference<br />This is a required field for SJO Engineering Builds</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.BondDiagram)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BondDiagramRev, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.BondDiagramRev, htmlAttributes: new { @class = "form-control bg-yellow", @id = "txtBondDiagramRev" })
+                        @Html.ValidationMessageFor(model => model.BondDiagramRev)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NPILot, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.NPILot, htmlAttributes: new { @class = "checkbox", @id = "chkNPILot" })
+                        @Html.ValidationMessageFor(model => model.NPILot)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsCompleted, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsCompleted, htmlAttributes: new { @class = "checkbox", @id = "chkIsCompleted" })
+                        @Html.ValidationMessageFor(model => model.IsCompleted)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <ul class="list-group">
+                            <li class="list-group-item text-center">@Html.LabelFor(model => model.EngineerTeam, htmlAttributes: new { @class = "control-label" })</li>
+                            <li class="list-group-item text-center text-color-red">
+                                ALL PACKAGE QUALIFICATION LOTS MUST BE ROUTED
+                                THROUGH PENANG QA & ASSEMBLY ENGINEERING TEAM
+                            </li>
+                            <li class="list-group-item">
+                                @Html.TextAreaFor(model => model.EngineerTeam, htmlAttributes: new { @class = "form-control bg-yellow", @rows = 17, @id = "txtEngineerTeam" })
+                                @Html.ValidationMessageFor(model => model.EngineerTeam)
+                            </li>
+                            <li class="list-group-item" style="font-size:10px;">Pack and label per ATMEL Procedure MP-5003.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TestLocationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.TestLocationId, new SelectList(Model.TestLocations, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboTestLocation" })
+                        @Html.ValidationMessageFor(model => model.TestLocationId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ProbeStatusId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ProbeStatusId, new SelectList(Model.ProbeStatus, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboProbeStatus" })
+                        @Html.ValidationMessageFor(model => model.ProbeStatusId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PackageTestTypeId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.DropDownListFor(model => model.PackageTestTypeId, new SelectList(Model.PackageTestTypes, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboPackageTestType" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>Optional</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.PackageTestTypeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TestProgram, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8 has-feedback">
+                        @Html.EBRTextBoxFor(model => model.TestProgram, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtTestProgram" })
+                        <span class="triangle-topright form-control-feedback" aria-hidden="false" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover"
+                              data-content="<strong>If program name is too long to view, please enter in Test/Special Instructions Area.</strong>"></span>
+                        @Html.ValidationMessageFor(model => model.TestProgram)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TestProgamAvailable, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.TestProgamAvailable, dropdownYESNO, "--- Select ---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboTestProgamAvailable" })
+                        @Html.ValidationMessageFor(model => model.TestProgamAvailable)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CommentAvailable, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.CommentAvailable, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtCommentAvailable" })
+                        @Html.ValidationMessageFor(model => model.CommentAvailable)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <ul class="list-group">
+                            <li class="list-group-item text-center">@Html.LabelFor(model => model.Test_Special_Instruction, htmlAttributes: new { @class = "control-label" })</li>
+                            <li class="list-group-item">
+                                @Html.TextAreaFor(model => model.Test_Special_Instruction, htmlAttributes: new { @class = "form-control bg-blue", @rows = 15, @id = "txtTest_Special_Instruction" })
+                                @Html.ValidationMessageFor(model => model.Test_Special_Instruction)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("ListSub", new List<EBROnline.ViewModel.ListSubViewModel>());
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequestedBy, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.RequestedBy, htmlAttributes: new { @class = "form-control bg-brown", @id = "txtRequestedBy", @value = Model.RequestedBy }, disabled: true)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmailAddressId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.EmailAddressId, new SelectList(Model.EmailAddress, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboEmailAddress" })
+                        @Html.ValidationMessageFor(model => model.EmailAddressId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.Phone, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtPhone" })
+                        @Html.ValidationMessageFor(model => model.EmailAddressId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequesterLocationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RequesterLocationId, new SelectList(Model.RequesterLocations, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-brown", @id = "cboRequesterLocation" })
+                        @Html.ValidationMessageFor(model => model.RequesterLocationId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BusinessUnit, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.BusinessUnit, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtBusinessUnit" })
+                        @Html.ValidationMessageFor(model => model.BusinessUnit)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApprovingManager, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.ApprovingManager, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtApprovingManager" })
+                        @Html.ValidationMessageFor(model => model.ApprovingManager)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ManagerEmailId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ManagerEmailId, new SelectList(Model.ManagerEmails, "Id", "Name"), "---Select---", htmlAttributes: new { @class = "form-control bg-blue", @id = "cboManagerEmail" })
+                        @Html.ValidationMessageFor(model => model.ManagerEmailId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalCost, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EBRTextBoxFor(model => model.TotalCost, htmlAttributes: new { @class = "form-control bg-blue", @id = "txtTotalCost" })
+                        @Html.ValidationMessageFor(model => model.TotalCost)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequestedShipDate, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        @Html.EBRTextBoxFor(model => model.RequestedShipDate, htmlAttributes: new { @class = "form-control bg-purple", @id = "txtRequestedShipDate" })
+                                    </td>
+                                    <td><img src="~/Content/images/calendar.png" class="img-calendar" id="imgCalendar" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @Html.ValidationMessageFor(model => model.RequestedShipDate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RequiresTestPgmApproval, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.RequiresTestPgmApproval, dropdownYESNO, "--- Select ---", htmlAttributes: new { @class = "form-control bg-blue", @id = "chkRequiresTestPgmApproval" })
+                        @Html.ValidationMessageFor(model => model.RequiresTestPgmApproval)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label  col-md-2">Attachments</label>
+                <div class="col-md-5">
+                    <input id="multipleFileUpload" name="multipleFileUpload" type="file" class="form-control btn btn-info pull-left" multiple />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-xs-12">
+                        <input type="submit" value="Draft" class="btn btn-primary btn-width-md cancel" id="btnSaveDraf" name="saveType" />
+                        <input type="submit" value="Submit" class="btn btn-primary btn-width-md" id="btnSaveSubmit" name="saveType" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@{
+    Html.RenderPartial("_PartialPageNotice");
+    Html.RenderPartial("_PartialPageAddSub", new ListSubViewModel());
+    Html.RenderPartial("_PartialPageLoading");
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        //window.onbeforeunload = confirmExit;
+        //function confirmExit(e) {
+        //    if (hasData() && !clickSave)
+        //        return "You have attempted to leave this page.  If you have made any changes to the fields without clicking the Save button, your changes will be lost. Are you sure you want to exit this page?";
+        //}
+
+        $(document).ready(function () {
+            $('#txtDevice').focus();
+
+            $('#btnAddSub').on('click', function () {
+                $('#modalInsertSub').modal(options);
+            });
+
+            $('#btnSaveSub').on('click', addRow);
+
+            $('#btnSaveSubmit').on('click', function (event) {
+                var accept = confirm('After submitted this form, you cannot edit it anymore. Are you sure to submit?');
+                if (!accept) event.preventDefault();
+            });
+
+            $('span[data-toggle="popover"]').popover();
+
+            onRegisterCalendar();
+
+            //Register upload files
+            onRegisterMultiUpload();
+
+            //Search
+            onSearchCNP();
+            onSearchSLCode();
+        });
+
+        onRegisterCalendar = function () {
+            $('#txtRequestedShipDate').datepicker({ autoSize: true, dateFormat: 'mm/dd/yy' });
+            //show calendar when click image Calendar
+            $('#imgCalendar').on('click', function () {
+                $('#txtRequestedShipDate').datepicker('show');
+            });
+        }
+
+        //param popup
+        var options = {
+            show: true,
+            backdrop: false
+        };
+
+        /*BEGIN NEW REQUEST*/
+        onBegin = function () {
+            $('input[type="submit"]').attr('disabled', true);
+            showLoading();
+        }
+        onSuccess = function (data) {
+            addSubMaster(data.id);
+            if (fileCollection.length > 0) {
+                var formData = new FormData($('#form0'));
+                $.each(fileCollection, function (i, file) {
+                    formData.append("files", file);
+                });
+                var url = '@Url.Action("UploadMultipleFiles")' + '?id=' + data.id;
+                var request = new XMLHttpRequest();
+                request.open('POST', url, true);
+                request.send(formData);
+            }
+        }
+        onFailure = function (data) {
+            hideLoading();
+
+            $('#modalSaveFailure').modal(options);
+        }
+        onComplete = function () {
+            $('input[type="submit"]').attr('disabled', false);
+        }
+
+        /*END NEW REQUEST*/
+        addSubMaster = function (idMaster) {
+            var emps = new Array();
+            $('#example>tbody>tr').each(function () {
+                var obj = new Object();
+                var name = $(this).find("td");
+                $.each(name, function (key, value) {
+                    var id = $(value).attr('id');
+                    switch (id) {
+                        case 'lotNumber':
+                            obj.LotNumber = value.innerHTML;
+                            break;
+                        case 'batchLotNumber':
+                            obj.BatchLotNumber = value.innerHTML;
+                            break;
+                        case 'waferQty':
+                            obj.WaferQty = value.innerHTML;
+                            break;
+                        case 'buildQuality':
+                            obj.BuildQuality = value.innerHTML;
+                            break;
+                        case 'comment':
+                            obj.Comment = value.innerHTML;
+                    }
+                });
+                emps.push(obj);
+            });
+            emps = JSON.stringify({ 'id': idMaster, 'emps': emps });
+            var postSub = $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Action("AddSub")',
+                data: emps,
+                success: function (e, data) {
+                    var url = '@Url.Action("Edit")' + '/' + e.data;
+                    $('#btnSuccessOK').attr('href', url);
+                    $('#modalSaveSuccess').modal(options);
+                },
+                error: function () { },
+                always: function () {
+                    hideLoading();
+                },
+            });
+        }
+
+        function hideLoading() {
+            $('#screen').css({ opacity: 0.2, 'width': 0, 'height': 0 });
+            $('body').css({ 'overflow': 'show' });
+            $('#box').css({ 'display': 'none' });
+            $('html').css('overflow', '-moz-scrollbars-vertical');
+            $('html').css('overflow-y', 'scroll');
+        }
+
+        function showLoading() {
+            $('#screen').css({ opacity: 0.2, 'width': $(document).width(), 'height': $(document).height() });
+            $('body').css({ 'overflow': 'hidden' });
+            $('#box').css({ 'display': 'block' });
+        }
+
+        function checkSaveTxt(selector, length) {
+            var check = true;
+            var ctr = $('#' + selector);
+
+            if (ctr != null) {
+                if ($.trim(ctr.value) == "") {
+                    check = false;
+                }
+                else
+                    if (length > 0 && $.trim(txtLotId.value).length > length) {
+                        check = false;
+                    }
+            }
+        }
+
+        function clearValue(selector) {
+            $this = $('#' + selector);
+            if ($this.is('input[type="text"]')) {
+                $this.val('');
+                return;
+            }
+
+            if ($this.is('select')) {
+                $this.prop('selectedIndex', 0);
+                return;
+            }
+
+            if ($this.is('input[type="checkbox"]')) {
+                $this.prop('checked', false);
+                return;
+            }
+        }
+        function ClearValueControl() { }
+        function CheckValueControl() {
+            checkSaveTxt("txtDevice", 0);
+            checkSaveTxt("txtRev", 0);
+            checkSaveTxt("txtFABDieRevision", 0);
+            checkSaveTxt("txtPMPN", 0);
+            checkSaveTxt("txtTMPN", 0);
+            checkSaveTxt("txtFMPN", 0);
+            checkSaveTxt("txtFMPN", 0);
+            checkSaveTxt("txtCPN_SAP_Material", 0);
+            checkSaveTxt("cboPackage", 0);
+            checkSaveTxt("txtPackageSize", 0);
+            checkSaveTxt("txtLeads", 0);
+            checkSaveTxt("txtSpeed", 0);
+            checkSaveTxt("txtEABI_EBR_Revision", 0);
+            checkSaveTxt("cboWaferSize", 0);
+            checkSaveTxt("txtCurrentWaferThickness", 0);
+            checkSaveTxt("txtInternalDevice", 0);
+            checkSaveTxt("cboFabCode", 0);
+            checkSaveTxt("txtPowerVoltage", 0);
+            checkSaveTxt("cboDieBlank", 0);
+            checkSaveTxt("cboAssemblyLocation", 0);
+            checkSaveTxt("cboFGLocation", 0);
+            checkSaveTxt("txtAssemblyFlow", 0);
+            checkSaveTxt("cboPackageType", 0);
+            checkSaveTxt("cboTopSideMarking", 0);
+            checkSaveTxt("txtMRL", 0);
+            checkSaveTxt("txtNameOfMarkingFile", 0);
+            checkSaveTxt("cboRequiresSpecialMark", 0);
+            checkSaveTxt("cboRequiresAssEngrInput", 0);
+            checkSaveTxt("cboMarkingCode", 0);
+            checkSaveTxt("txtPin1Marking", 0);
+            checkSaveTxt("txtTopLine", 0);
+            checkSaveTxt("txtTwoLine", 0);
+            checkSaveTxt("txtThreeLine", 0);
+            checkSaveTxt("txtFourLine", 0);
+            checkSaveTxt("txtFiveLine", 0);
+            checkSaveTxt("txtSixLine", 0);
+            checkSaveTxt("cboShipFinishedProductTo", 0);
+            checkSaveTxt("txtAttentionFinished", 0);
+            checkSaveTxt("cboShipRejectedPartTo", 0);
+            checkSaveTxt("txtAttentionRejected", 0);
+            checkSaveTxt("cboReturnWaferTo", 0);
+            checkSaveTxt("cboVendorContact", 0);
+            checkSaveTxt("cboVendorCode", 0);
+            checkSaveTxt("cboPurposeOfBuild", 0);
+            checkSaveTxt("cboLotOwner", 0);
+            checkSaveTxt("cboRequestCycleTime", 0);
+            checkSaveTxt("cboPKGProcess", 0);
+            checkSaveTxt("cboQualityLevel", 0);
+            checkSaveTxt("cboRevenueLocation", 0);
+            checkSaveTxt("chkBondDiagramAttached", 0);
+            checkSaveTxt("chkUV_Erase", 0);
+            checkSaveTxt("chkDieCoat", 0);
+            checkSaveTxt("cboWireMaterial", 0);
+            checkSaveTxt("cboProcessLTS", 0);
+            checkSaveTxt("cboForecastMaterial", 0);
+            checkSaveTxt("txtBondDiagram", 0);
+            checkSaveTxt("txtBondDiagramRev", 0);
+            checkSaveTxt("txtEngineerTeam", 0);
+            checkSaveTxt("cboTestLocation", 0);
+            checkSaveTxt("cboProbeStatus", 0);
+            checkSaveTxt("cboPackageTestType", 0);
+            checkSaveTxt("txtTestProgram", 0);
+            checkSaveTxt("cboTestProgamAvailable", 0);
+            checkSaveTxt("txtCommentAvailable", 0);
+            checkSaveTxt("txtTest_Special_Instruction", 0);
+            checkSaveTxt("txtRequestedBy", 0);
+            checkSaveTxt("cboEmailAddress", 0);
+            checkSaveTxt("Phone", 0);
+            checkSaveTxt("cboRequesterLocation", 0);
+            checkSaveTxt("txtBusinessUnit", 0);
+        }
+
+        /*BEGIN MODAL POPUP SHOW AND HIDEN*/
+        function changeValueInPopup() {
+            $('#btnSaveSub').attr('disabled', true);
+            var inputs = $('#modalInsertSub').find('input[type="text"], input[type="number"]');
+            for (var i = 0; i < inputs.length; i++) {
+                var $this = $(inputs[i]);
+                $this.on('input propertychange paste', function () {
+                    var stackDieId = $('#txtAddStackDieId').val();
+                    var stackDiePMPN = $('#txtAddStackDiePMPN').val();
+                    var stackDieQty = $('#txtAddStackDieQty').val();
+                    var stackDieWaferNumbers = $('#txtAddStackDieWaferNumbers').val();
+                    var lotNumber = $('#txtAddLotNumber').val();
+                    var batchLotNumber = $('#txtAddBatchLotNumber').val();
+                    var waferQty = $('#txtAddWaferQty').val();
+                    var build = $('#txtAddBuildQuality').val();
+                    var comment = $('#txtAddComment').val();
+                    if ($.trim(stackDieId) == '' ||
+                        $.trim(stackDiePMPN) == '' ||
+                        $.trim(stackDieQty) == '' ||
+                        $.trim(stackDieWaferNumbers) == '' ||
+                        $.trim(lotNumber) == '' ||
+                        $.trim(batchLotNumber) == '' ||
+                        $.trim(waferQty) == '' ||
+                        $.trim(build) == '') {
+                    }
+                    else {
+                        $('#btnSaveSub').attr('disabled', false);
+                    }
+                });
+            }
+        }
+
+        $('#modalInsertSub').on('shown.bs.modal', function () {
+            $('#txtAddStackDieId').focus();
+            changeValueInPopup();
+        })
+
+        $('#modalInsertSub').on('hidden.bs.modal', function () {
+            $(this).find('input[type="text"], input[type="number"]').val('');
+        })
+
+        $('#modalEditSub').on('shown.bs.modal', function () {
+            $('#txtEditLotNumber').focus();
+        })
+
+        $('#modalEditSub').on('hidden.bs.modal', function () {
+            $(this).find('input[type="text"], input[type="number"]').val('');
+        })
+        /*END MODAL POPUP SHOW AND HIDEN*/
+
+
+        /*BEGIN EXECUTE ADD, EDIT,DEL ROW SUB*/
+        var dataEdit = null;
+        function addRow(event) {
+            event.preventDefault();
+
+            var isPass = true;
+            var stackDieId = $('#txtAddStackDieId').val();
+            var stackDiePMPN = $('#txtAddStackDiePMPN').val();
+            var stackDieQty = $('#txtAddStackDieQty').val();
+            var stackDieWaferNumbers = $('#txtAddStackDieWaferNumbers').val();
+            var lotNumber = $('#txtAddLotNumber').val();
+            var batchLotNumber = $('#txtAddBatchLotNumber').val();
+            var waferQty = $('#txtAddWaferQty').val();
+            var build = $('#txtAddBuildQuality').val();
+            var comment = $('#txtAddComment').val();
+
+            if ($.trim(lotNumber) == '' ||
+                $.trim(batchLotNumber) == '' ||
+                    $.trim(waferQty) == '' ||
+                    $.trim(build) == '')
+                isPass = false;
+
+            if (isPass) {
+                $('#example').append(
+               "<tr><td id='stackDieId'>" + stackDieId + "</td>" +
+               "<td id='stackDiePMPN'>" + stackDiePMPN + "</td>" +
+               "<td id='stackDieQty'>" + stackDieQty + "</td>" +
+               "<td id='stackDieWaferNumbers'>" + stackDieWaferNumbers + "</td>" +
+               "<td id='lotNumber'>" + lotNumber + "</td>" +
+               "<td id='batchLotNumber'>" + batchLotNumber + "</td>" +
+               "<td id='waferQty'>" + waferQty + "</td>" +
+               "<td id='buildQuality'>" + build + "</td>" +
+               "<td id='comment'>" + comment + "</td>" +
+               "<td class='text-nowrap'><input type='button' class='btn btn-link btn-min sub-edit' id='btnSubEdit' value='Edit'/>|" +
+               "<input type='button' class='btn btn-link btn-min sub-delete' id='btnSubDelete' value='Delete'/></td></tr>");
+
+                $('.sub-edit').on('click', editRow);
+                $('.sub-delete').on('click', delRow);
+
+                $('#modalInsertSub').modal('hide');
+            }
+        }
+        function delRow() {
+            $(this).parent().parent().remove();
+        }
+        function editRow() {
+            dataEdit = $(this).parent().parent();//get tr
+            var lotNumber = dataEdit.children('td:nth-child(1)').text();
+            var batchLotNumber = dataEdit.children('td:nth-child(2)').text();
+            var waferQty = dataEdit.children('td:nth-child(3)').text();
+            var build = dataEdit.children('td:nth-child(4)').text();
+            var comment = dataEdit.children('td:nth-child(5)').text();
+
+            $('#txtEditLotNumber').val(lotNumber);
+            $('#txtEditBatchLotNumber').val(batchLotNumber);
+            $('#txtEditWaferQty').val(waferQty);
+            $('#txtEditBuildQuality').val(build);
+            $('#txtEditComment').val(comment);
+
+            $('#btnEditSaveSub').on('click', function () {
+                dataEdit.children('td:nth-child(1)').text($('#txtEditLotNumber').val());
+                dataEdit.children('td:nth-child(2)').text($('#txtEditBatchLotNumber').val());
+                dataEdit.children('td:nth-child(3)').text($('#txtEditWaferQty').val());
+                dataEdit.children('td:nth-child(4)').text($('#txtEditBuildQuality').val());
+                dataEdit.children('td:nth-child(5)').text($('#txtEditComment').val());
+
+                $('#modalEditSub').modal('hide');
+            });
+
+            $('#modalEditSub').modal(options);
+        }
+        /*END EXECUTE ADD, EDIT,DEL ROW SUB*/
+
+        /*begin upload file*/
+        //file collection array
+        var fileCollection = new Array();
+
+        onRegisterMultiUpload = function () {
+            $('#multipleFileUpload').on('change', function (e) {
+                var files = e.target.files;
+                $.each(files, function (i, file) {
+                    fileCollection.push(file);
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function (e) {
+
+                    }
+                });
+            });
+        }
+        /*end upload file*/
+
+        /*Search*/
+        onSearchCNP = function () {
+            $('#txtCPN_SAP_Material').autocomplete({
+                source: '@Url.Action("SearchByCNP", "SNPZFullMD")',
+                minLength: 1,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        $(this).val(ui.item.value);
+                    }
+                },
+                autofill: true,
+                selectFirst: true,
+                highlight: true,
+                multiple: false
+            });
+        }
+
+        onSearchSLCode = function () {
+            $("#txtRev").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("SearchBySLCode", "SNPZFullMD")',
+                        dataType: "json",
+                        data: {
+                            slCode: request.term,
+                            cnp: $('#txtCPN_SAP_Material').val(),
+                        },
+                        success: function (data) {
+                            response(data.items);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        $(this).val(ui.item.value);
+
+                        //searchEBR();
+                    }
+                },
+                autofill: true,
+                selectFirst: true,
+                highlight: true,
+                multiple: false
+            });
+        }
+
+        searchEBR = function () {
+            cnp = $('#txtCPN_SAP_Material').val();
+            sl = $("#txtRev").val();
+
+            $.ajax({
+                url: '@Url.Action("SearchEBR", "SNPZFullMD")',
+                dataType: "json",
+                data: {
+                    cnp: cnp,
+                    sl: sl,
+                },
+                success: function (data) {
+                    console.log(data.item);
+                    bindData(data.item);
+                }
+            });
+        }
+
+        bindData = function (data) {
+            $('#cboPackage option').each(function (index, el) {
+                if (data.PackageFamily == $(el).text())
+                    $(this).parent().val($(this).val());
+            });
+            
+            $('#cboVendorCode option').each(function (index, el) {
+                if (data.CSO == $(el).text())
+                    $(this).parent().val($(this).val());
+            });
+
+            $('#txtLeads').val(data.LeadCount);
+            $('#txtCurrentWaferThichness').val(data.BodyThickness);
+        }
+        /*End Search*/
+    </script>
+}

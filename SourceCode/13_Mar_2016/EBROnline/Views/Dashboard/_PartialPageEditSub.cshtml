@@ -1,0 +1,67 @@
+﻿@model EBROnline.ViewModel.ListSubViewModel
+
+<div class="modal fade in" id="modalSubInsert">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3>Add Lot</h3>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    @{Html.RenderPartial("_PartialPageSubAdd", Model);}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="modalSubEdit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3>Edit Lot</h3>
+                </div>
+            </div>
+            <div class="modal-body" id="modalSubEditBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal popup Save Successfully *@
+<div class="modal fade in" id="modalSaveSuccess">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Save information</h3>
+            </div>
+            <div class="modal-body">
+                <span class="text-success">The EBR Request was successfully saved!</span>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("OK", "Edit", null, htmlAttributes: new { @class = "btn btn-success btn-width-md", @id = "btnSuccessOK" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal popup Save Failure *@
+<div class="modal fade in" id="modalSaveFailure">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Save information</h3>
+            </div>
+            <div class="modal-body">
+                <span class="text-danger">The EBR Request was failure saved!</span>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="btnSV02" class="btn btn-success btn-width-md" data-dismiss="modal" aria-hidden="true">OK</a>
+            </div>
+        </div>
+    </div>
+</div>

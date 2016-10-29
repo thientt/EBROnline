@@ -1,0 +1,86 @@
+﻿@model EBROnline.ViewModel.ListSubViewModel
+@{
+    AjaxOptions ajaxOption = new AjaxOptions
+    {
+        Url = Url.Action("Edit", "SubDashboard"),
+        HttpMethod = "POST",
+        OnBegin = "onEditSubBegin",
+        OnComplete = "onEditSubComplete",
+        OnSuccess = "onEditSubSuccess",
+        OnFailure = "onEditSubFailure",
+    };
+}
+
+@using (Ajax.BeginForm(ajaxOption))
+{
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.DashboardId)
+        <div class="form-group">
+            <label class="control-label col-md-4">Stack Die ID</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => Model.StackDieId, htmlAttributes: new { @class = "form-control", @id = "txtAddStackDieId", @type = "text", @autofocus = true })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Stack Die PMPN</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => Model.StackDiePMPN, htmlAttributes: new { @class = "form-control", @id = "txtAddStackDiePMPN", @type = "text" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Stack Die Qty</label>
+            <div class="col-md-8">
+                <input type="number" name="StackDieQty" class="form-control" id="txtAddStackDieQty" value="@Model.StackDieQty" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Stack Die Wafer Numbers</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => Model.StackDieWaferNumbers, htmlAttributes: new { @class = "form-control", @id = "txtAddStackDieWaferNumbers", @type = "text" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">MES Lot Number</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => x.LotNumber, htmlAttributes: new { @class = "form-control", @id = "txtAddLotNumber" })
+                @Html.ValidationMessageFor(x => x.LotNumber)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">SAP Batch Lot Number</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => x.BatchLotNumber, htmlAttributes: new { @class = "form-control", @id = "txtAddBatchLotNumber" })
+                @Html.ValidationMessageFor(x => x.BatchLotNumber)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Wafer Qty</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => x.WaferQty, htmlAttributes: new { @class = "form-control", @id = "txtAddWaferQty" })
+                @Html.ValidationMessageFor(x => x.WaferQty)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Build Quality</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => x.BuildQuality, htmlAttributes: new { @class = "form-control", @id = "txtAddBuildQuality" })
+                @Html.ValidationMessageFor(x => x.BuildQuality)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Comment/Wafer's</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(x => x.Comment, htmlAttributes: new { @class = "form-control", @id = "txtAddComment" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-8">
+                <input type="submit" value="Edit" class="btn btn-primary btn-width-md" id="btnSaveSub" />
+                <button type="button" class="btn btn-default btn-width-md" id="btnSubCancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+
+

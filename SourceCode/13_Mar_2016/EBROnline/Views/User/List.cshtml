@@ -1,0 +1,93 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<EBROnline.Model.DTO.SYSUsersDto>
+@{
+    AjaxOptions ajaxPaging = new AjaxOptions()
+    {
+        UpdateTargetId = "tblUsers",
+        HttpMethod = "GET",
+    };
+}
+
+<link href="~/Content/main.css" rel="stylesheet" />
+
+<div id="tblUsers">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="header">
+                <tr>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Full Name</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Role</th>
+                    <th class="text-center">Locked</th>
+                    <th class="text-center">Register Date</th>
+                    <th class="text-center"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.Email == User.Identity.Name)
+                    {
+                        <tr>
+                            <td>@item.Email</td>
+                            <td>@item.FullName</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Role.Name</td>
+                            <td class="text-center">@Html.CheckBoxFor(x => item.IsLocked, htmlAttributes: new { @disabled = "disabled" })</td>
+                            <td>@Html.DisplayFor(x => item.RegistedDate, "DisplayDateTime")</td>
+                            <td class="text-nowrap">
+                                @*<a href="@Url.Action("SetRole", "User", new { id = item.Id })">Set Role</a>  |*@
+                                @*<button type="button" class="btn btn-link btn-setrole" data-url="@Url.Action("SetRole", routeValues: new { id=item.Id})" disabled="disabled">SetRole</button>|
+                                    @if (item.IsLocked)
+                                    {
+                                        <button type="button" data-url="@Url.Action("Unlocked", "User", new { id = item.Id })" class="btn btn-link btn-unlock" data-toggle="popover" disabled="disabled">Unlocked User</button>
+                                    }
+                                    else
+                                    {
+                                        <button data-url="@Url.Action("Lock", "User", new { id = item.Id })" class="btn btn-link btn-lock" data-toggle="popover" disabled="disabled">Lock User</button>
+                                    }*@
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@item.Email</td>
+                            <td>@item.FullName</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Role.Name</td>
+                            <td class="text-center">@Html.CheckBoxFor(x => item.IsLocked, htmlAttributes: new { @disabled = "disabled" })</td>
+                            <td>@Html.DisplayFor(x => item.RegistedDate, "DisplayDateTime")</td>
+                            <td class="text-nowrap">
+                                <button type="button" class="btn btn-link btn-setrole" data-url="@Url.Action("SetRole", routeValues: new { id=item.Id})">SetRole</button>|
+                                @if (item.IsLocked)
+                                {
+                                    <button type="button" data-url="@Url.Action("Unlocked", "User", new { id = item.Id })" class="btn btn-link btn-unlock" data-toggle="popover">Unlocked User</button>
+                                }
+                                else
+                                {
+                                    <button data-url="@Url.Action("Lock", "User", new { id = item.Id })" class="btn btn-link btn-lock" data-toggle="popover">Lock User</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+
+
+            <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <div id="contentPager" class="pull-right">
+                            @Html.PagedListPager(Model, page => Url.Action("List", new { page }),
+                        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(ajaxPaging))
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>

@@ -1,0 +1,232 @@
+﻿@{  ViewBag.Title = "Users";}
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<div class="row">
+    <h2>List of Users</h2>
+    <br />
+    @{
+        Html.RenderPartial("_PartialPageAlert");
+        Html.RenderAction("List");
+    }
+</div>
+
+@{Html.RenderPartial("_PartialPageLoading");}
+
+@*BEGIN MODAL POPUP*@
+<div class="modal fade in" id="modalChangeRole">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Set User Role</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+@*END MODAL POPUP*@
+
+@*BEGIN POPOVER*@
+<div class="popover" id="popoverUnlock">
+    <div class="text-center">
+        <div class="popover-footer">
+            <button class="btn btn-danger btn-sm" id="btnUnlockYes">Yes</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-default btn-sm" id="btnUnlockNo">No</button>
+        </div>
+    </div>
+</div>
+
+<div class="popover" id="popoverLock">
+    <div class="text-center">
+        <div class="popover-footer">
+            <button class="btn btn-danger btn-sm" id="btnLockYes">Yes</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-default btn-sm" id="btnLockNo">No</button>
+        </div>
+    </div>
+</div>
+<div id="popoverLockTitle" style="display:none;">
+    Are you sure lock user?
+</div>
+<div id="popoverUnlockTitle" style="display:none;">
+    Are you sure unlock user?
+</div>
+@*END POPOVER*@
+
+@section Scripts{
+    <script>
+        var option = { show: true, backdrop: false }
+        var urlUnlock = '';
+        var urlLock = '';
+
+        $(document).ready(function () {
+            onRegisterAction();
+            onRegisterPopover();
+            onRegisterLockUser();
+            onRegisterUnlockUser();
+        });
+
+        onRegisterAction = function () {
+            $('#tblUsers').on('click', '.btn-setrole, .btn-lock, .btn-unlock', function (event) {
+                event.preventDefault();
+                var target = event.target;
+                var attrClass = $(target).attr('class').toLowerCase().replace('btn btn-link ', '');
+                var $self = $(this);
+                switch (attrClass) {
+                    case 'btn-setrole':
+                        onSetRole($self);
+                        break;
+                    case 'btn-lock':
+                        onLockUser($self);
+                        //popoverLock($self);
+                        break;
+                    case 'btn-unlock':
+                        onUnlockUser($self);
+                        //popoverUnLock($self);
+                        break;
+                }
+            });
+        }
+
+        /*BEGIN POPOVER*/
+        onRegisterPopover = function () {
+            $('#tblUsers .btn-lock').popover({
+                show: true,
+                trigger: 'focus',
+                placement: 'left',
+                html: true,
+                content: function () { return $('#popoverLock').html(); },
+                title: function () { return $('#popoverLockTitle').html(); }
+            });
+            $('#tblUsers .btn-unlock').popover({
+                show: true,
+                trigger: 'focus',
+                placement: 'left',
+                html: true,
+                content: function () { return $('#popoverUnlock').html(); },
+                title: function () { return $('#popoverUnlockTitle').html(); }
+            });
+        }
+        /*END POPOVER*/
+
+        /*BEGIN AJAX SETROLE*/
+        onSetRole = function ($self) {
+            var url = $self.attr('data-url');
+            $('#modalChangeRole .modal-body').load(url, function () {
+                $('#modalChangeRole').modal(option);
+            });
+        }
+        onUnlockUser = function ($self) {
+            //get url unlock user
+            urlUnlock = $self.attr('data-url');
+        }
+        onLockUser = function ($self) {
+            urlLock = $self.attr('data-url');
+        }
+        onRegisterLockUser = function () {
+            $('#tblUsers').on('click', '#btnLockYes', function () {
+                var ajaxRequest = $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: urlLock,
+                });
+
+                ajaxRequest.success(function (e) {
+                    $('#tblUsers').load('@Url.Action("List")', function () {
+                        actionEditSuccess();
+                        onRegisterPopover();
+                    });
+                });
+
+                ajaxRequest.error(function (e) {
+                    actionEditFailure();
+                });
+            });
+        }
+        onRegisterUnlockUser = function () {
+            $('#tblUsers').on('click', '#btnUnlockYes', function (event) {
+                var ajaxRequest = $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: urlUnlock,
+                });
+
+                ajaxRequest.success(function (e) {
+                    $('#tblUsers').load('@Url.Action("List")', function () {
+                        actionEditSuccess();
+                        onRegisterPopover();
+                    });
+                });
+
+                ajaxRequest.error(function (e) {
+                    actionEditFailure();
+                });
+            });
+        }
+        onSetRoleBegin = function () {
+            //hide modal popup
+            $('#modalChangeRole').modal('hide');
+            //show icon loading
+            showLoading();
+        }
+        onSetRoleComplete = function () {
+            hideLoading();
+        }
+        onSetRoleSuccess = function (res) {
+            //update table
+            if (res.code == 'SB01') {
+                //show alert successfully
+                actionSuccess();
+                //reload table role
+                loadTableRole();
+            }
+        }
+        onSetRoleFailure = function (res) {
+            if (res.code == 'SB02') {
+                //show alert failure
+                actionFailure();
+            }
+        }
+        /*END JAJAX SETROLE*/
+
+        @*BEGIN IMPLEMENT FUNCTION*@
+        function showLoading() {
+            $('#screen').css({ opacity: 0.2, 'width': $(document).width(), 'height': $(document).height() });
+            $('body').css({ 'overflow': 'hidden' });
+            $('#box').css({ 'display': 'block' });
+
+            $('#modalChangeRole').modal('hide');
+        }
+        function hideLoading() {
+            $('#screen').css({ opacity: 0.2, 'width': 0, 'height': 0 });
+            $('body').css({ 'overflow': 'show' });
+            $('#box').css({ 'display': 'none' });
+            $('html').css('overflow', '-moz-scrollbars-vertical');
+            $('html').css('overflow-y', 'scroll');
+        }
+        function loadTableRole() {
+            $('#tblUsers').load('@Url.Action("List")');
+        }
+        function actionSuccess() {
+            $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+                $("#success-alert").css('display', 'none');
+            });
+        }
+        function actionFailure() {
+            $("#danger-alert").fadeTo(2000, 500).slideUp(500, function () {
+                $("#danger-alert").css('display', 'none');
+            });
+        }
+        function actionEditSuccess() {
+            $("#success-alert-edit").fadeTo(2000, 500).slideUp(500, function () {
+                $("#success-alert-edit").css('display', 'none');
+            });
+        }
+        function actionEditFailure() {
+            $("#danger-alert-edit").fadeTo(2000, 500).slideUp(500, function () {
+                $("#danger-alert-edit").css('display', 'none');
+            });
+        }
+        @*END IMPLEMENT FUNCTION*@
+    </script>
+}

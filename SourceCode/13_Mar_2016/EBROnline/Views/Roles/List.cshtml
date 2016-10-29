@@ -1,0 +1,55 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<EBROnline.Model.DTO.SYSRolesDto>
+@{
+    ViewBag.Title = "Index";
+
+    AjaxOptions ajaxPaging = new AjaxOptions()
+    {
+        UpdateTargetId = "tblRoles",
+        HttpMethod = "GET",
+    };
+}
+
+<link href="~/Content/main.css" rel="stylesheet" />
+
+<div id="tblRoles">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="header">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Role Name </th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center">Last Update by</th>
+                    <th class="text-center">Last Update</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.LastUpdatedBy</td>
+                        <td>@Html.DisplayFor(x => item.LastUpdated, "DisplayDateTime")</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, htmlAttributes: new { @class = "btn-edit" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div id="contentPager" class="pull-right">
+                            @Html.PagedListPager(Model, page => Url.Action("List", new { page }),
+                        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(ajaxPaging))
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
