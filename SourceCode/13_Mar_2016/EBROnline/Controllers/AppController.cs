@@ -1,7 +1,11 @@
 ﻿using EBROnline.Model.DTO;
 using EBROnline.Model.Entities;
+using EBROnline.Utilities;
 using Microsoft.Owin.Security;
+using Ninject;
+using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -21,7 +25,7 @@ namespace EBROnline.Controllers
         /// <value>
         /// The authentication manager.
         /// </value>
-        public IAuthenticationManager AuthenticationManager
+        protected IAuthenticationManager AuthenticationManager
         {
             get
             {
@@ -36,7 +40,7 @@ namespace EBROnline.Controllers
         /// <value>
         /// The name of the current.
         /// </value>
-        public string CurrentName
+        protected string CurrentName
         {
             get
             {
@@ -47,7 +51,7 @@ namespace EBROnline.Controllers
             }
         }
 
-        public string Role
+        protected string Role
         {
             get
             {
@@ -63,43 +67,66 @@ namespace EBROnline.Controllers
             }
         }
 
-        //protected MSTAssLocDto ConvertToDto(EBR_MST_AssemblyLocation data)
-        //{
-        //    return new MSTAssLocDto()
-        //    {
-        //        Id = data.Id,
-        //        Description = data.Description,
-        //        IsDeleted = data.IsDeleted,
-        //        LastUpdated = data.LastUpdated,
-        //        LastUpdatedBy = data.LastUpdatedBy,
-        //        Name = data.Name
-        //    };
-        //}
+        protected JsonResult ExecuteResult(Func<JsonResult> action)
+        {
+            return action();
+        }
 
-        //protected EBR_MST_AssemblyLocation ConvertToDB(MSTAssLocDto data)
-        //{
-        //    return new EBR_MST_AssemblyLocation()
-        //    {
-        //        Id = data.Id,
-        //        Description = data.Description,
-        //        IsDeleted = data.IsDeleted,
-        //        LastUpdated = data.LastUpdated,
-        //        LastUpdatedBy = data.LastUpdatedBy,
-        //        Name = data.Name
-        //    };
-        //}
+        protected JsonResult ExecuteWithErrorHandling(Func<JsonResult> action)
+        {
+            CheckModelState();
 
-        //protected EBR_MST_Package ConvertToDB(MSTPackageDto data)
-        //{
-        //    return new EBR_MST_Package()
-        //    {
-        //        Id = data.Id,
-        //        Description = data.Description,
-        //        IsDeleted = data.IsDeleted,
-        //        LastUpdated = data.LastUpdated,
-        //        LastUpdatedBy = data.LastUpdatedBy,
-        //        Name = data.Name
-        //    };
-        //}
+            if (action != null)
+            {
+                try
+                {
+                    return action();
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex);
+                }
+            }
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new { code = "SB02" }
+            };
+        }
+
+        protected async Task<JsonResult> ExecuteWithErrorHandling(Func<Task<JsonResult>> action)
+        {
+            CheckModelState();
+
+            if (action != null)
+            {
+                try
+                {
+                    return await action();
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex);
+                }
+            }
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new { code = "SB02" }
+            };
+        }
+
+        private void CheckModelState()
+        {
+            if (!ModelState.IsValid)
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        [Inject]
+        public ILogService LogService { get; set; }
     }
 }

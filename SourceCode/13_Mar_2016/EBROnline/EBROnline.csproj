@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -240,6 +241,7 @@
     <Compile Include="Infractructure\HtmlExtension.cs" />
     <Compile Include="Infractructure\FilterPage.cs" />
     <Compile Include="Infractructure\Mail.cs" />
+    <Compile Include="Infractructure\ModeExtension.cs" />
     <Compile Include="PdfContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />

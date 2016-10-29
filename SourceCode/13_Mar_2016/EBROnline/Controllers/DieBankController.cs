@@ -5,7 +5,6 @@ using EBROnline.Model.Entities;
 using EBROnline.ViewModel;
 using Ninject;
 using PagedList;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -75,13 +74,7 @@ namespace EBROnline.Controllers
 
             if (ModelState.IsValid)
             {
-                MSTDieBankDto ass = new MSTDieBankDto()
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    LastUpdatedBy = CurrentName,
-                    LastUpdated = DateTime.Now
-                };
+                MSTDieBankDto ass = model.ToBase().WithUser(CurrentName).TryToDto<MSTDieBankDto>();
 
                 EBR_MST_DieBank assDB = new EBR_MST_DieBank();
                 ConvertToWay<MSTDieBankDto, EBR_MST_DieBank>.ConvertTo(ass, out assDB);
@@ -121,13 +114,7 @@ namespace EBROnline.Controllers
             MSTDieBankDto ass = new MSTDieBankDto();
             ConvertToWay<EBR_MST_DieBank, MSTDieBankDto>.ConvertTo(DieBankRep.Single(id), out ass);
 
-            MSTViewModel bind = new MSTViewModel
-            {
-                Id = id,
-                Name = ass.Name,
-                Description = ass.Description,
-            };
-            return PartialView("_PartialPageMSTEdit", bind);
+            return PartialView("_PartialPageMSTEdit", ass.ToShortViewModel(id));
         }
 
         /// <summary>
@@ -145,14 +132,8 @@ namespace EBROnline.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    MSTDieBankDto ass = new MSTDieBankDto()
-                    {
-                        Id = id,
-                        Name = model.Name,
-                        Description = model.Description,
-                        LastUpdatedBy = CurrentName,
-                        LastUpdated = DateTime.Now
-                    };
+
+                    MSTDieBankDto ass = model.ToBase(id).WithUser(CurrentName).TryToDto<MSTDieBankDto>();
 
                     EBR_MST_DieBank assDB = new EBR_MST_DieBank();
                     ConvertToWay<MSTDieBankDto, EBR_MST_DieBank>.ConvertTo(ass, out assDB);

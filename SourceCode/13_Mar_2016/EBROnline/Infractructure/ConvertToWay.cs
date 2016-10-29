@@ -3,14 +3,14 @@ using System.Reflection;
 
 namespace EBROnline.Infractructure
 {
-    public class ConvertToWay<TFirst, TLast>
+    public class ConvertToWay<TFrom, TTo>
     {
-        public static void ConvertTo(TFirst first, out TLast last)
+        public static void ConvertTo(TFrom from, out TTo to)
         {
-            Type type = typeof(TLast);
-            last = (TLast)Activator.CreateInstance(type);
+            Type type = typeof(TTo);
+            to = (TTo)Activator.CreateInstance(type);
 
-            var proInfoFirsts = typeof(TFirst).GetProperties();
+            var proInfoFirsts = typeof(TFrom).GetProperties();
 
             foreach (PropertyInfo info in proInfoFirsts)
             {
@@ -20,8 +20,8 @@ namespace EBROnline.Infractructure
                     info.PropertyType == typeof(bool))
                 {
                     string name = info.Name;
-                    object obj = info.GetValue(first);
-                    type.GetProperty(name).SetValue(last, obj);
+                    object obj = info.GetValue(from);
+                    type.GetProperty(name).SetValue(to, obj);
                 }
             }
         }
