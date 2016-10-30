@@ -1,9 +1,8 @@
-﻿using EBROnline.Model.DTO;
-using EBROnline.Model.Entities;
-using EBROnline.Utilities;
+﻿using EBROnline.Utilities;
 using Microsoft.Owin.Security;
 using Ninject;
 using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -67,9 +66,14 @@ namespace EBROnline.Controllers
             }
         }
 
-        protected JsonResult ExecuteResult(Func<JsonResult> action)
+        protected JsonResult ExecuteResult(Func<JsonResult> func)
         {
-            return action();
+            return func();
+        }
+
+        protected async Task<JsonResult> ExecuteResult(Func<Task<JsonResult>> func)
+        {
+            return await func();
         }
 
         protected JsonResult ExecuteWithErrorHandling(Func<JsonResult> action)
@@ -123,6 +127,48 @@ namespace EBROnline.Controllers
             if (!ModelState.IsValid)
             {
                 throw new ArgumentException();
+            }
+        }
+
+        protected async Task<JsonResult> ExecuteResultWithStatus(Func<Task<Model.SaveResult>> func)
+        {
+            if (func == null)
+                throw new Exception();
+
+            var result = await func();
+
+            switch (result)
+            {
+                case Model.SaveResult.SUCCESS:
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return new JsonResult()
+                    {
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                        Data = new { code = "SB01" }
+                    };
+                default:
+                    return new JsonResult()
+                    {
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                        Data = new { code = "SB02" }
+                    };
+            }
+        }
+
+        protected async Task<JsonResult> ExecuteResultDelete(Func<Task<Model.SaveResult>> delete)
+        {
+            if (delete == null)
+                throw new Exception();
+
+            var result = await delete();
+            switch (result)
+            {
+                case Model.SaveResult.SUCCESS:
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return Json("SUCCESS", JsonRequestBehavior.AllowGet);
+                default:
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json("FAILURE", JsonRequestBehavior.AllowGet);
             }
         }
 

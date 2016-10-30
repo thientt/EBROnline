@@ -1,7 +1,7 @@
 ﻿using EBROnline.Model.DTO;
-using EBROnline.Model.Entities;
 using EBROnline.ViewModel;
 using System;
+using System.Collections.Generic;
 
 namespace EBROnline.Infractructure
 {
@@ -62,8 +62,7 @@ namespace EBROnline.Infractructure
             return @base == null ? null : WithUser(@base, currentName);
         }
 
-        //--------------------Begin Location----------------------------//
-        public static TTo ToEntity<TTo, TFrom>(this TFrom @base) where TTo : class where TFrom : class
+        public static TTo ToEntity<TTo, TFrom>(this TFrom @base) where TTo : class where TFrom : MSTDto
         {
             var to = default(TTo);
             ConvertToWay<TFrom, TTo>.ConvertTo(@base, out to);
@@ -71,7 +70,7 @@ namespace EBROnline.Infractructure
             return to;
         }
 
-        public static TTo TryToEntity<TTo, TFrom>(this TFrom @base) where TTo : class where TFrom : class
+        public static TTo TryToEntity<TTo, TFrom>(this TFrom @base) where TTo : class where TFrom : MSTDto
         {
             if (@base == null)
                 return null;
@@ -89,7 +88,47 @@ namespace EBROnline.Infractructure
             }
         }
 
-        //--------------------End Location----------------------------//
+        public static TTo ToData<TTo, TFrom>(this TFrom @base) where TTo : MSTDto where TFrom : class
+        {
+            var to = default(TTo);
+            ConvertToWay<TFrom, TTo>.ConvertTo(@base, out to);
+
+            return to;
+        }
+
+        public static TTo TryToData<TTo, TFrom>(this TFrom @base) where TTo : MSTDto where TFrom : class
+        {
+            if (@base == null)
+                return null;
+
+            try
+            {
+                var to = default(TTo);
+                ConvertToWay<TFrom, TTo>.ConvertTo(@base, out to);
+
+                return to;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static IEnumerable<TTo> ToDataTransferObjects<TTo, TFrom>(this IEnumerable<TFrom> entities) where TTo : MSTDto where TFrom : class
+        {
+            foreach (var item in entities)
+            {
+                yield return item.ToData<TTo, TFrom>();
+            }
+        }
+
+        public static IEnumerable<TTo> TryToDataTransferObjects<TTo, TFrom>(this IEnumerable<TFrom> entities) where TTo : MSTDto where TFrom : class
+        {
+            if (entities == null)
+                return null;
+
+            return ToDataTransferObjects<TTo, TFrom>(entities);
+        }
 
         private static MSTDto ToBaseSimple(this MSTViewModel model)
         {

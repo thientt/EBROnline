@@ -5,8 +5,6 @@ using EBROnline.Model.Entities;
 using EBROnline.ViewModel;
 using Ninject;
 using PagedList;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -40,16 +38,11 @@ namespace EBROnline.Controllers
         [HttpGet]
         public PartialViewResult List(int? page)
         {
-            List<MSTDieBankDto> items = new List<MSTDieBankDto>();
-            DieBankRep.GetAll().ToList().ForEach(x =>
-            {
-                MSTDieBankDto item = new MSTDieBankDto();
-                ConvertToWay<EBR_MST_DieBank, MSTDieBankDto>.ConvertTo(x, out item);
-                items.Add(item);
-            });
+            var items = DieBankRep
+                .GetAll()
+                .ToDataTransferObjects<MSTDieBankDto, EBR_MST_DieBank>();
 
-            int pageNumber = page ?? 1;
-            return PartialView(items.ToPagedList(pageNumber, EBROnlineConfig.PAGESIZE));
+            return PartialView(items.ToPagedList(page ?? 1, EBROnlineConfig.PAGESIZE));
         }
 
         /// <summary>
@@ -70,37 +63,20 @@ namespace EBROnline.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(MSTViewModel model)
         {
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-            if (ModelState.IsValid)
+            return await ExecuteWithErrorHandling(async () =>
             {
-                MSTDieBankDto ass = model.ToBase().WithUser(CurrentName).TryToDto<MSTDieBankDto>();
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-                EBR_MST_DieBank assDB = new EBR_MST_DieBank();
-                ConvertToWay<MSTDieBankDto, EBR_MST_DieBank>.ConvertTo(ass, out assDB);
-                var result = await DieBankRep.AddAsync(assDB);
-                switch (result)
+                var bank = model.ToBase()
+                        .WithUser(CurrentName)
+                        .TryToDto<MSTDieBankDto>()
+                        .ToEntity<EBR_MST_DieBank, MSTDieBankDto>();
+
+                return await ExecuteResultWithStatus(async () =>
                 {
-                    case Model.SaveResult.SUCCESS:
-                        Response.StatusCode = (int)HttpStatusCode.OK;
-                        return new JsonResult()
-                        {
-                            JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                            Data = new { code = "SB01" }
-                        };
-                    default:
-                        return new JsonResult()
-                        {
-                            JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                            Data = new { code = "SB02" }
-                        };
-                }
-            }
-            return new JsonResult()
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { code = "SB02" }
-            };
+                    return await DieBankRep.AddAsync(bank);
+                });
+            });
         }
 
         /// <summary>
@@ -111,10 +87,11 @@ namespace EBROnline.Controllers
         [HttpGet]
         public PartialViewResult Edit(int id)
         {
-            MSTDieBankDto ass = new MSTDieBankDto();
-            ConvertToWay<EBR_MST_DieBank, MSTDieBankDto>.ConvertTo(DieBankRep.Single(id), out ass);
+            var bank = DieBankRep
+                .Single(id)
+                .TryToData<MSTDieBankDto, EBR_MST_DieBank>();
 
-            return PartialView("_PartialPageMSTEdit", ass.ToShortViewModel(id));
+            return PartialView("_PartialPageMSTEdit", bank.ToShortViewModel(id));
         }
 
         /// <summary>
@@ -126,42 +103,21 @@ namespace EBROnline.Controllers
         [HttpPost]
         public async Task<JsonResult> Edit(int id, MSTViewModel model)
         {
-            if (ModelState.IsValid)
+            return await ExecuteWithErrorHandling(async () =>
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-                if (ModelState.IsValid)
+                var bank = model
+                .ToBase(id)
+                .WithUser(CurrentName)
+                .TryToDto<MSTDieBankDto>()
+                .ToEntity<EBR_MST_DieBank, MSTDieBankDto>();
+
+                return await ExecuteResultWithStatus(async () =>
                 {
-
-                    MSTDieBankDto ass = model.ToBase(id).WithUser(CurrentName).TryToDto<MSTDieBankDto>();
-
-                    EBR_MST_DieBank assDB = new EBR_MST_DieBank();
-                    ConvertToWay<MSTDieBankDto, EBR_MST_DieBank>.ConvertTo(ass, out assDB);
-                    var result = await DieBankRep.UpdateAsync(assDB);
-                    switch (result)
-                    {
-                        case Model.SaveResult.SUCCESS:
-                            Response.StatusCode = (int)HttpStatusCode.OK;
-                            return new JsonResult()
-                            {
-                                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                Data = new { code = "SB01" }
-                            };
-                        default:
-                            return new JsonResult()
-                            {
-                                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                Data = new { code = "SB02" }
-                            };
-                    }
-                }
-
-            }
-            return new JsonResult()
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { code = "SB02" }
-            };
+                    return await DieBankRep.UpdateAsync(bank);
+                });
+            });
         }
 
         /// <summary>
@@ -172,22 +128,19 @@ namespace EBROnline.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<JsonResult> DeleteConfirmed(int id)
         {
-            if (id == 0)
+            return await ExecuteWithErrorHandling(async () =>
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Bad Request", JsonRequestBehavior.AllowGet);
-            }
-
-            var result = await DieBankRep.DeleteByAsync(id);
-            switch (result)
-            {
-                case Model.SaveResult.SUCCESS:
-                    Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json("SUCCESS", JsonRequestBehavior.AllowGet);
-                default:
+                if (id == 0)
+                {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return Json("FAILURE", JsonRequestBehavior.AllowGet);
-            }
+                    return Json("Bad Request", JsonRequestBehavior.AllowGet);
+                }
+
+                return await ExecuteResultDelete(async () =>
+                {
+                    return await DieBankRep.DeleteByAsync(id);
+                });
+            });
         }
 
         /// <summary>

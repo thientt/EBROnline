@@ -1,16 +1,13 @@
 ﻿using EBROnline.Infractructure;
 using EBROnline.Model.Abstracts;
 using EBROnline.Model.DTO;
+using EBROnline.Model.Entities;
 using EBROnline.ViewModel;
 using Ninject;
 using PagedList;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using EBROnline.Model.Entities;
-using System;
 
 /// <summary>
 /// 
@@ -41,37 +38,11 @@ namespace EBROnline.Controllers
         [HttpGet]
         public PartialViewResult List(int? page)
         {
-            var items = new List<MSTFGLocationDto>();
-            LocationRep.GetAll().ToList().ForEach(x =>
-            {
-                items.Add(x.ToEntity<MSTFGLocationDto, EBR_MST_FGLocation>());
-            });
+            var items = LocationRep
+                .GetAll()
+                .ToDataTransferObjects<MSTFGLocationDto, EBR_MST_FGLocation>();
 
-            int pageNumber = page ?? 1;
-            return PartialView(items.ToPagedList(pageNumber, EBROnlineConfig.PAGESIZE));
-        }
-
-        /// <summary>
-        /// Detailses the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult> Detail(int id)
-        {
-            await LocationRep.GetAllAsync();
-
-            if (id == 0)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            var assDB = await LocationRep.SingleAsync(id);
-
-            MSTFGLocationDto ass = new MSTFGLocationDto();// ConvertToDto(assDB);
-            ConvertToWay<EBR_MST_FGLocation, MSTFGLocationDto>.ConvertTo(assDB, out ass);
-            if (ass == null)
-                return HttpNotFound();
-
-            return View(ass);
+            return PartialView(items.ToPagedList(page ?? 1, EBROnlineConfig.PAGESIZE));
         }
 
         /// <summary>
@@ -92,35 +63,18 @@ namespace EBROnline.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(MSTViewModel model)
         {
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
             return await ExecuteWithErrorHandling(async () =>
             {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
                 var loc = model.ToBase()
                 .WithUser(CurrentName)
                 .TryToDto<MSTFGLocationDto>()
                 .TryToEntity<EBR_MST_FGLocation, MSTFGLocationDto>();
 
-                var result = await LocationRep.AddAsync(loc);
-
-                return ExecuteResult(() =>
+                return await ExecuteResultWithStatus(async () =>
                  {
-                     switch (result)
-                     {
-                         case Model.SaveResult.SUCCESS:
-                             Response.StatusCode = (int)HttpStatusCode.OK;
-                             return new JsonResult()
-                             {
-                                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                 Data = new { code = "SB01" }
-                             };
-                         default:
-                             return new JsonResult()
-                             {
-                                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                 Data = new { code = "SB02" }
-                             };
-                     }
+                     return await LocationRep.AddAsync(loc);
                  });
             });
         }
@@ -133,8 +87,8 @@ namespace EBROnline.Controllers
         [HttpGet]
         public PartialViewResult Edit(int id)
         {
-            MSTFGLocationDto ass = LocationRep.Single(id).TryToEntity<MSTFGLocationDto, EBR_MST_FGLocation>();
-            return PartialView("_PartialPageMSTEdit", ass.TryToShortViewModel(id));
+            var loc = LocationRep.Single(id).TryToData<MSTFGLocationDto, EBR_MST_FGLocation>();
+            return PartialView("_PartialPageMSTEdit", loc.TryToShortViewModel(id));
         }
 
         /// <summary>
@@ -146,35 +100,18 @@ namespace EBROnline.Controllers
         [HttpPost]
         public async Task<JsonResult> Edit(int id, MSTViewModel model)
         {
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
             return await ExecuteWithErrorHandling(async () =>
             {
-                var entity = model.ToBase(id)
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+                var loc = model.ToBase(id)
                         .WithUser(CurrentName)
                         .TryToDto<MSTFGLocationDto>()
                         .ToEntity<EBR_MST_FGLocation, MSTFGLocationDto>();
 
-                var result = await LocationRep.UpdateAsync(entity);
-
-                return ExecuteResult(() =>
+                return await ExecuteResultWithStatus(async () =>
                 {
-                    switch (result)
-                    {
-                        case Model.SaveResult.SUCCESS:
-                            Response.StatusCode = (int)HttpStatusCode.OK;
-                            return new JsonResult()
-                            {
-                                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                Data = new { code = "SB01" }
-                            };
-                        default:
-                            return new JsonResult()
-                            {
-                                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                                Data = new { code = "SB02" }
-                            };
-                    }
+                    return await LocationRep.UpdateAsync(loc);
                 });
             });
         }
@@ -196,18 +133,9 @@ namespace EBROnline.Controllers
                     return Json("Bad Request", JsonRequestBehavior.AllowGet);
                 }
 
-                var result = await LocationRep.DeleteByAsync(id);
-                return ExecuteResult(() =>
+                return await ExecuteResultDelete(async () =>
                 {
-                    switch (result)
-                    {
-                        case Model.SaveResult.SUCCESS:
-                            Response.StatusCode = (int)HttpStatusCode.OK;
-                            return Json("SUCCESS", JsonRequestBehavior.AllowGet);
-                        default:
-                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                            return Json("FAILURE", JsonRequestBehavior.AllowGet);
-                    }
+                    return await LocationRep.DeleteByAsync(id);
                 });
             });
         }
