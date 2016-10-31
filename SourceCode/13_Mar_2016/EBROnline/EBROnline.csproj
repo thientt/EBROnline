@@ -193,6 +193,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Attributes\" />
+    <Folder Include="Views\ApiBase\" />
     <Folder Include="Views\SNPZFullMD\" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +203,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ApiBaseController.cs" />
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\PKProcessTypeController.cs" />
     <Compile Include="Controllers\SNPZFullMDController.cs" />
